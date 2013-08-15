@@ -127,9 +127,12 @@ class ClearableMemcachedBytecodeCache(BytecodeCache):
 def create_jinja_environment(loader, locale=None):
     """Create proper jinja environment."""
 
-    cache = jinja2.MemcachedBytecodeCache(
-        models.MemcacheManager, timeout=models.DEFAULT_CACHE_TTL_SECS,
-        prefix='jinja2:bytecode:%s:/' % models.MemcacheManager.get_namespace())
+    cache = None
+    if CAN_USE_JINJA2_TEMPLATE_CACHE.value:
+        prefix = 'jinja2:bytecode:%s:/' % models.MemcacheManager.get_namespace()
+        cache = jinja2.MemcachedBytecodeCache(
+            models.MemcacheManager, timeout=models.DEFAULT_CACHE_TTL_SECS,
+            prefix=prefix)
 
     jinja_environment = jinja2.Environment(
 <<<<<<< HEAD:BigDataMOOC/common/jinja_utils.py
