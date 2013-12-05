@@ -135,20 +135,9 @@ def create_jinja_environment(loader, locale=None):
             prefix=prefix)
 
     jinja_environment = jinja2.Environment(
-<<<<<<< HEAD:BigDataMOOC/common/jinja_utils.py
-        autoescape=True, finalize=finalize,
-<<<<<<< HEAD:BigDataMOOC/common/jinja_utils.py
-        extensions=['jinja2.ext.i18n'],
-		bytecode_cache=ClearableMemcachedBytecodeCache(MemcacheManager),
-        loader=jinja2.FileSystemLoader(dirs))
-=======
-        extensions=['jinja2.ext.i18n'], loader=loader)
-=======
         autoescape=True, finalize=finalize, extensions=['jinja2.ext.i18n'],
         bytecode_cache=cache, loader=loader)
->>>>>>> 9fa04ea... Enabled bytecode caching for jinja templates.:coursebuilder/common/jinja_utils.py
 
->>>>>>> 8ffb1de... Consolidated creation of jinja templates in preparation for adding compiled template cache.:coursebuilder/common/jinja_utils.py
     jinja_environment.filters['js_string'] = js_string
 
     if locale:
@@ -156,7 +145,6 @@ def create_jinja_environment(loader, locale=None):
         jinja_environment.install_gettext_translations(i18n)
 
     return jinja_environment
-
 
 def get_template(template_name, dirs, locale=None, handler=None):
     """Sets up an environment and gets jinja template."""
