@@ -153,15 +153,7 @@ class LocalReadOnlyFileSystem(object):
         for dir_name in dir_names:
             physical_dir_names.append(self._logical_to_physical(dir_name))
 
-<<<<<<< HEAD:BigDataMOOC/models/vfs.py
-        jinja_environment = jinja2.Environment(
-            autoescape=True, finalize=jinja_utils.finalize,
-            extensions=['jinja2.ext.i18n'],
-			bytecode_cache=jinja_utils.ClearableMemcachedBytecodeCache(
-                MemcacheManager),
-=======
         return jinja_utils.create_jinja_environment(
->>>>>>> 8ffb1de... Consolidated creation of jinja templates in preparation for adding compiled template cache.:coursebuilder/models/vfs.py
             loader=jinja2.FileSystemLoader(physical_dir_names))
 
     def is_read_write(self):
@@ -510,16 +502,7 @@ class DatastoreBackedFileSystem(object):
         return sorted(list(result))
 
     def get_jinja_environ(self, dir_names):
-<<<<<<< HEAD:BigDataMOOC/models/vfs.py
-
-        jinja_environment = jinja2.Environment(
-            autoescape=True, finalize=jinja_utils.finalize,
-            extensions=['jinja2.ext.i18n'],
-			bytecode_cache=jinja_utils.ClearableMemcachedBytecodeCache(
-                MemcacheManager, namespace=self._ns),
-=======
         return jinja_utils.create_jinja_environment(
->>>>>>> 8ffb1de... Consolidated creation of jinja templates in preparation for adding compiled template cache.:coursebuilder/models/vfs.py
             loader=VirtualFileSystemTemplateLoader(
                 self, self._logical_home_folder, dir_names))
 
