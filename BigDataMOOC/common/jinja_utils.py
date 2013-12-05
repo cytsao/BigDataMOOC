@@ -116,19 +116,34 @@ class ClearableMemcachedBytecodeCache(BytecodeCache):
             if not self.ignore_memcache_errors:
                 raise
 
-def get_template(template_name, dirs, locale=None, handler=None):
-    """Sets up an environment and gets jinja template."""
+def create_jinja_environment(loader, locale=None):
+    """Create proper jinja environment."""
 
     jinja_environment = jinja2.Environment(
         autoescape=True, finalize=finalize,
+<<<<<<< HEAD:BigDataMOOC/common/jinja_utils.py
         extensions=['jinja2.ext.i18n'],
 		bytecode_cache=ClearableMemcachedBytecodeCache(MemcacheManager),
         loader=jinja2.FileSystemLoader(dirs))
+=======
+        extensions=['jinja2.ext.i18n'], loader=loader)
+
+>>>>>>> 8ffb1de... Consolidated creation of jinja templates in preparation for adding compiled template cache.:coursebuilder/common/jinja_utils.py
     jinja_environment.filters['js_string'] = js_string
-    jinja_environment.filters['gcb_tags'] = get_gcb_tags_filter(handler)
 
     if locale:
         i18n.get_i18n().set_locale(locale)
         jinja_environment.install_gettext_translations(i18n)
+
+    return jinja_environment
+
+
+def get_template(template_name, dirs, locale=None, handler=None):
+    """Sets up an environment and gets jinja template."""
+
+    jinja_environment = create_jinja_environment(
+        jinja2.FileSystemLoader(dirs), locale=locale)
+
+    jinja_environment.filters['gcb_tags'] = get_gcb_tags_filter(handler)
 
     return jinja_environment.get_template(template_name)
