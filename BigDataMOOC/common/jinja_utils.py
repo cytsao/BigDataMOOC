@@ -17,11 +17,19 @@
 __author__ = 'John Orr (jorr@google.com)'
 
 import jinja2
+from models import config
+from models import models
 from webapp2_extras import i18n
 from models.models import MemcacheManager
 import safe_dom
 import tags
 from jinja2.bccache import BytecodeCache
+
+
+CAN_USE_JINJA2_TEMPLATE_CACHE = config.ConfigProperty(
+    'gcb_can_use_jinja2_template_cache', bool, safe_dom.Text(
+        'Whether jinja2 can cache bytecode of compiled templates in memcache.'),
+    default_value=True)
 
 
 def finalize(x):
@@ -119,7 +127,12 @@ class ClearableMemcachedBytecodeCache(BytecodeCache):
 def create_jinja_environment(loader, locale=None):
     """Create proper jinja environment."""
 
+    cache = jinja2.MemcachedBytecodeCache(
+        models.MemcacheManager, timeout=models.DEFAULT_CACHE_TTL_SECS,
+        prefix='jinja2:bytecode:%s:/' % models.MemcacheManager.get_namespace())
+
     jinja_environment = jinja2.Environment(
+<<<<<<< HEAD:BigDataMOOC/common/jinja_utils.py
         autoescape=True, finalize=finalize,
 <<<<<<< HEAD:BigDataMOOC/common/jinja_utils.py
         extensions=['jinja2.ext.i18n'],
@@ -127,6 +140,10 @@ def create_jinja_environment(loader, locale=None):
         loader=jinja2.FileSystemLoader(dirs))
 =======
         extensions=['jinja2.ext.i18n'], loader=loader)
+=======
+        autoescape=True, finalize=finalize, extensions=['jinja2.ext.i18n'],
+        bytecode_cache=cache, loader=loader)
+>>>>>>> 9fa04ea... Enabled bytecode caching for jinja templates.:coursebuilder/common/jinja_utils.py
 
 >>>>>>> 8ffb1de... Consolidated creation of jinja templates in preparation for adding compiled template cache.:coursebuilder/common/jinja_utils.py
     jinja_environment.filters['js_string'] = js_string
